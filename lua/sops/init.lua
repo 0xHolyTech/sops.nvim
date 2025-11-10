@@ -119,7 +119,9 @@ end
 
 M.toggle = function()
     M.disabled = not M.disabled
-    vim.cmd([[w]])
+    if vim.api.nvim_get_option_value("modified", { buf = bufnr }) then
+        vim.cmd([[w]])
+    end
     vim.cmd([[e]])
 end
 
