@@ -118,7 +118,7 @@ local function sops_encrypt_buffer(bufnr)
 end
 
 M.toggle = function()
-    M.is_disabled = not M.is_disabled
+    M.disabled = not M.disabled
     vim.cmd([[w]])
     vim.cmd([[e]])
 end
@@ -127,8 +127,6 @@ end
 M.setup = function(opts)
   vim.api.nvim_create_user_command('SopsToggle', M.toggle, {})
   opts = opts or {}
-
-  -- Allow default plugin disabled state
   if opts.disabled then
       M.disabled = true
   end
