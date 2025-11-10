@@ -2,7 +2,7 @@ local util = require("sops.util")
 
 ---@class SopsModule
 local M = {
-    is_disabled = false,
+    disabled = false,
 }
 
 -- Default file formats supported by the plugin
@@ -128,6 +128,11 @@ M.setup = function(opts)
   vim.api.nvim_create_user_command('SopsToggle', M.toggle, {})
   opts = opts or {}
 
+  -- Allow default plugin disabled state
+  if opts.disabled then
+      M.disabled = true
+  end
+
   -- Allow overriding or appending to the supported file formats
   if opts.supported_file_formats then
     for _, format in ipairs(opts.supported_file_formats) do
@@ -139,7 +144,7 @@ M.setup = function(opts)
     pattern = SUPPORTED_FILE_FORMATS,
     callback = function()
       local bufnr = vim.api.nvim_get_current_buf()
-      if not util.is_sops_encrypted(bufnr) or M.is_disabled then
+      if not util.is_sops_encrypted(bufnr) or M.disabled then
         return
       end
 
